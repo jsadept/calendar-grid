@@ -1,5 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components';
+import Task from "./Task/Task";
+import TaskList from "./Task/TaskList";
 
 type Day = {
     dayOfMonth: number
@@ -129,6 +131,10 @@ const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) 
                                 </DayNumber>
                                 <CardAmount>Cards 1</CardAmount>
                             </DayHeader>
+                            <TaskList>
+                                <Task color="orange" number="tewt" title="Task 1" tags={[{title: 'Tag4', color: 'red'}, {title: 'Tag5', color: "blue"}, {title: 'Tag5', color: "orange"}, {title: 'Tag5', color: "green"}]} />
+                                <Task color="orange" number="tewt" title="Task 2" tags={[{title: 'Tag4', color: 'red'}, {title: 'Tag5', color: "blue"}, {title: 'Tag5', color: "orange"}, {title: 'Tag5', color: "green"}]} />
+                            </TaskList>
                         </Day>
                     :   <Day
                             key={'day-box-' + index}
