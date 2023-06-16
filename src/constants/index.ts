@@ -26,3 +26,12 @@ export const MONTHS_ARRAY = [
     'November',
     'December',
 ];
+
+export const DEFAULT_TAGS = [
+    { title: 'Tag1', color: '#FFAB49', checked: false },
+    { title: 'Tag2', color: '#60BE50', checked: false },
+    { title: 'Tag3', color: '#0378BE', checked: false },
+    { title: 'Tag4', color: '#00C3E1', checked: false },
+    { title: 'Tag5', color: '#F2D701', checked: false },
+    { title: 'Tag6', color: '#C376E0', checked: false },
+]

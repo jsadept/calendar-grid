@@ -61,12 +61,11 @@ const Task: React.FC<TaskProps> = ({
                     >
                         {tags && (
                             <TagsWrapper>
-                                {tags.map((tag, index) => (
+                                {tags.filter((tag) => tag.checked).map((tag, index) => (
                                     <Tag key={index} color={tag.color} />
                                 ))}
                             </TagsWrapper>
                         )}
-                        taskId: {taskId}
                         <Title>{title}</Title>
                     </TaskWrapper>
                 );

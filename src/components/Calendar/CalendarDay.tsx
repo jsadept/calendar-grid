@@ -1,6 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import TaskList from "./Task/TaskList";
 import styled from "styled-components";
+import AddNewTaskForm from "../Forms/AddNewTaskForm";
 import useOutsideClick from "../../hooks/useClickOutside";
 
 
@@ -154,6 +155,12 @@ const CalendarDay: FC<CalendarDayProps> = ({ day, tasks, onDragEnd, provided }) 
                 <TaskList dayId={day.date} tasks={tasks} onDragEnd={onDragEnd} isExpanded={isExpanded} />
                 {provided.placeholder}
                 {isExpanded && <NewCardBtn onClick={handleButtonClick}>Create New Card</NewCardBtn>}
+                {showForm &&
+                    <AddNewTaskForm
+                        onClose={() => {setShowForm(!showForm);}}
+                        dayId={day.date}
+                    />
+                }
             </DayContent>
         </Day>
     );

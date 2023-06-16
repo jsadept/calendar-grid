@@ -22,4 +22,5 @@ interface ITask {
 interface ITag {
     title: string;
     color: string;
+    checked?: boolean;
 }
