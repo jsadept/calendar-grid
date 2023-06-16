@@ -4,15 +4,19 @@ import Task from "./Task";
 import {Droppable} from "react-beautiful-dnd";
 
 const TaskListContainer = styled.div`
-  max-height: 120px;
   overflow: auto;
+  max-height: 120px;
+  height: 100%;
+  &.expanded {
+    max-height: 300px;
+  }
 `;
 
-const TaskList: React.FC = ({ tasks, dayId, onDragEnd }) => { //todo fix type
+const TaskList: React.FC = ({ tasks, dayId, onDragEnd, isExpanded }) => { //todo fix type
     return (
         <Droppable droppableId={dayId}>
             {(provided, snapshot) => (
-                <TaskListContainer ref={provided.innerRef} {...provided.droppableProps}>
+                <TaskListContainer ref={provided.innerRef} {...provided.droppableProps} className={`${isExpanded && 'expanded'}`}>
                     {tasks && tasks.map((task, index) => (
                         <Task
                             key={task.id}
