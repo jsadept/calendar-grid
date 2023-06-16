@@ -8,7 +8,7 @@ const TaskListContainer = styled.div`
   overflow: auto;
 `;
 
-const TaskList: React.FC = ({ tasks, dayId, onDragEnd }) => {
+const TaskList: React.FC = ({ tasks, dayId, onDragEnd }) => { //todo fix type
     return (
         <Droppable droppableId={dayId}>
             {(provided, snapshot) => (

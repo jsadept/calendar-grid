@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import {MONTHS_ARRAY} from "../../constants";
 
 type CalendarHeaderProps = {
     selectedYear: number;
@@ -74,20 +75,7 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
     onNextClick,
     onCurrentClick,
 }) => {
-    const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ];
+
 
     return (
         <HeaderWrapper>
@@ -97,7 +85,7 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
                 <Button onClick={onNextClick}> {">"} </Button>
             </LeftSection>
             <CenterSection>
-                {months[selectedMonth]} {selectedYear}
+                {MONTHS_ARRAY[selectedMonth]} {selectedYear}
             </CenterSection>
             <RightSection>
                 <CloseButton>&times;</CloseButton>

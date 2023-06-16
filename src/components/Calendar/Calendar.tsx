@@ -3,8 +3,8 @@ import CalendarHeader from './CalendarHeader';
 import CalendarGrid from './CalendarGrid';
 
 import { createDaysForCalendarView } from '../../helpers/dateHelpers';
+import {WEEKDAYS_ARRAY} from "../../constants";
 
-const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const Calendar: FC = () => {
     const today = new Date();
@@ -50,7 +50,7 @@ const Calendar: FC = () => {
                 onNextClick={goToNextMonth}
                 onCurrentClick={goToCurrentMonth}
             />
-            <CalendarGrid daysForCalendarView={daysForCalendarView} WEEKDAYS={WEEKDAYS} />
+            <CalendarGrid daysForCalendarView={daysForCalendarView} WEEKDAYS={WEEKDAYS_ARRAY} />
         </div>
     );
 };

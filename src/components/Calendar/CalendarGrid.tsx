@@ -1,75 +1,14 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, useCallback, useMemo} from 'react'
 import styled from 'styled-components';
-import TaskList from "./Task/TaskList";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux";
+import {updateTasks} from "../../store/task/task-slice";
+import CalendarDay from "./CalendarDay";
+import {selectTasks} from "../../store/task/task-selectors";
 
-
-const taskData = {
-    '2023-6-16': [
-        {
-            id: '1',
-            color: 'orange',
-            number: '23',
-            title: 'Task 1',
-            tags: [
-                { title: 'Tag1', color: 'red' },
-                { title: 'Tag2', color: 'blue' }
-            ],
-            date: '2023-6-16'
-        },
-        {
-            id: '2',
-            color: 'orange',
-            number: '23',
-            title: 'Task 2',
-            tags: [
-                { title: 'Tag4', color: 'red' },
-                { title: 'Tag5', color: 'blue' },
-                { title: 'Tag6', color: 'orange' },
-                { title: 'Tag7', color: 'green' },
-            ],
-            date: '2023-6-16'
-        },
-        {
-            id: '4',
-            color: 'orange',
-            number: '23',
-            title: 'Task 2',
-            tags: [
-                { title: 'Tag4', color: 'red' },
-                { title: 'Tag5', color: 'blue' },
-                { title: 'Tag6', color: 'orange' },
-                { title: 'Tag7', color: 'green' },
-            ],
-            date: '2023-6-16'
-        }
-    ],
-    '2023-6-15': [
-        {
-            id: '3',
-            color: 'orange',
-            number: '23',
-            title: 'Task 3',
-            tags: [
-                { title: 'Tag1', color: 'red' },
-                { title: 'Tag2', color: 'blue' }
-            ],
-            date: '2023-6-16'
-        },
-    ]
-}
-
-type Day = {
-    dayOfMonth: number
-    isCurrentMonth: boolean
-    isWeekend: boolean
-    isToday: boolean
-    isFirstOrLastDay: boolean
-    currentMonth: string
-}
 
 type CalendarGridProps = {
-    daysForCalendarView: Day[]
+    daysForCalendarView: IDay[]
     WEEKDAYS: string[]
 }
 
@@ -104,62 +43,12 @@ const Weekday = styled.div`
   }
 `;
 
-const Day = styled.div`
-  width: 100%;
-  height: 160px;
-  cursor: pointer;
-  border-radius: 2px;
-  background-color: #F7F8F9;
-
-  color: #172B4D;
-
-
-  &.currentMonth {
-    background-color: #e9ebeb;
-  }
-
-
-  &.today {
-    border: none;
-    background-color: #E9F2FF;
-  }
-
-  &:hover {
-    background-color: #DCDFE4;
-  }
-
-  @media only screen and (max-width: 425px) {
-    font-size: 0.625rem;
-    border-radius: 0.625rem;
-  }
-`;
-
-const DayHeader = styled.div`
-    width: 100%;
-    height: 40px;
-    display: flex;
-    color: #172B4D;
-    padding: 10px 0 0 10px;
-    font-size: 16px;
-`;
-
-const DayNumber = styled.div`
-    margin-right: 10px;
-    font-weight: 700;
-    text-transform: capitalize;
-`;
-
-const CardAmount = styled.div`
-    font-weight: 100;
-  color: #828C91;
-  
-`;
-
 const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) => {
 
-    const [tasks, setTasks] = useState(taskData);
+    const dispatch = useAppDispatch();
+    const tasks = useAppSelector(selectTasks);
 
-    const onDragEnd = (result) => {
+    const onDragEnd = useCallback((result) => {
         const { destination, source, draggableId } = result;
 
         if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
@@ -189,8 +78,12 @@ const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) 
                 )
         };
 
-        setTasks(updatedTasks);
-    };
+        if (updatedSourceTasks.length === 0) {
+            delete updatedTasks[source.droppableId];
+        }
+
+        dispatch(updateTasks(updatedTasks));
+    }, [tasks, dispatch]);
 
     return (
         <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
@@ -198,32 +91,20 @@ const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) 
                 {WEEKDAYS.map((weekday, index) => (
                     <Weekday key={'weekday-' + index}>{weekday}</Weekday>
                 ))}
-                {daysForCalendarView.map((day, index) => (
-                    <Droppable droppableId={day.date} key={'day-box-' + day.date}>
-                        {(provided, snapshot) => (
-                            <Day
-                                ref={provided.innerRef} {...provided.droppableProps}
-                                className={`day ${day.isCurrentMonth && 'currentMonth'} ${day.isWeekend && 'weekend'} ${day.isToday && 'today'}`}
-                            >
-                                <DayHeader>
-                                    <DayNumber>
-                                        {day.isFirstOrLastDay ? `${day.currentMonth} ${day.dayOfMonth}` : day.dayOfMonth}
-                                    </DayNumber>
-
-                                    { tasks[day.date] &&
-                                        <CardAmount>
-                                            Cards {tasks[day.date].length}
-                                        </CardAmount>
-                                    }
-                                </DayHeader>
-
-                                <TaskList dayId={day.date} tasks={tasks[day.date] || []} onDragEnd={onDragEnd} />
-
-                                {provided.placeholder}
-                            </Day>
-                        )}
-                    </Droppable>
-                ))}
+                {daysForCalendarView.map((day, index) => {
+                    return (
+                        <Droppable droppableId={day.date} key={'day-box-' + day.date}>
+                            {(provided, snapshot) => (
+                                <CalendarDay
+                                    day={day}
+                                    tasks={tasks[day.date] || []}
+                                    onDragEnd={onDragEnd}
+                                    provided={provided}
+                                />
+                            )}
+                        </Droppable>
+                    )
+                })}
             </CalendarGridWrapper>
         </DragDropContext>
     )
