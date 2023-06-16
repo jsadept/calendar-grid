@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Draggable} from "react-beautiful-dnd";
 
 type TaskProps = {
-    taskId?: string;
-    color?: string;
-    number?: string;
+    taskId: string;
+    index: any; //todo: fix type
     title?: string;
     tags?: any; //todo: fix type
-    onDragStart?: (taskId: string) => void;
     onDragEnd?: (taskId: string, targetIndex: number) => void;
 };
 
@@ -46,28 +45,34 @@ const Title = styled.div`
 
 const Task: React.FC<TaskProps> = ({
     taskId,
-    color,
-    number,
+    index,
     title,
     tags,
-    onDragStart,
     onDragEnd
 }) => {
-
-
-
-
     return (
-        <TaskWrapper>
-            {tags && (
-                <TagsWrapper>
-                    {tags.map((tag, index) => (
-                        <Tag key={index} color={tag.color} />
-                    ))}
-                </TagsWrapper>
-            )}
-            <Title>{title}</Title>
-        </TaskWrapper>
+        <Draggable draggableId={taskId} index={index} onDragEnd={onDragEnd}>
+            {(provided, snapshot) => {
+                return (
+                    <TaskWrapper
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                    >
+                        {tags && (
+                            <TagsWrapper>
+                                {tags.map((tag, index) => (
+                                    <Tag key={index} color={tag.color} />
+                                ))}
+                            </TagsWrapper>
+                        )}
+                        taskId: {taskId}
+                        <Title>{title}</Title>
+                    </TaskWrapper>
+                );
+            }}
+        </Draggable>
+
     );
 };
 

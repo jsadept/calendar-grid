@@ -1,7 +1,63 @@
-import React, { FC } from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import styled from 'styled-components';
-import Task from "./Task/Task";
 import TaskList from "./Task/TaskList";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
+
+const taskData = {
+    '2023-6-16': [
+        {
+            id: '1',
+            color: 'orange',
+            number: '23',
+            title: 'Task 1',
+            tags: [
+                { title: 'Tag1', color: 'red' },
+                { title: 'Tag2', color: 'blue' }
+            ],
+            date: '2023-6-16'
+        },
+        {
+            id: '2',
+            color: 'orange',
+            number: '23',
+            title: 'Task 2',
+            tags: [
+                { title: 'Tag4', color: 'red' },
+                { title: 'Tag5', color: 'blue' },
+                { title: 'Tag6', color: 'orange' },
+                { title: 'Tag7', color: 'green' },
+            ],
+            date: '2023-6-16'
+        },
+        {
+            id: '4',
+            color: 'orange',
+            number: '23',
+            title: 'Task 2',
+            tags: [
+                { title: 'Tag4', color: 'red' },
+                { title: 'Tag5', color: 'blue' },
+                { title: 'Tag6', color: 'orange' },
+                { title: 'Tag7', color: 'green' },
+            ],
+            date: '2023-6-16'
+        }
+    ],
+    '2023-6-15': [
+        {
+            id: '3',
+            color: 'orange',
+            number: '23',
+            title: 'Task 3',
+            tags: [
+                { title: 'Tag1', color: 'red' },
+                { title: 'Tag2', color: 'blue' }
+            ],
+            date: '2023-6-16'
+        },
+    ]
+}
 
 type Day = {
     dayOfMonth: number
@@ -101,54 +157,75 @@ const CardAmount = styled.div`
 
 const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) => {
 
+    const [tasks, setTasks] = useState(taskData);
 
-    const handleDragWithinCell = (taskId: string, targetIndex: number) => {
-        // dispatch(reorderTask(taskId, targetIndex));
-        console.log('handleDragWithinCell', taskId, targetIndex)
+    const onDragEnd = (result) => {
+        const { destination, source, draggableId } = result;
 
+        if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
+            return;
+        }
+
+        const sourceTasks = tasks[source.droppableId];
+        const draggedTask = sourceTasks.find((task) => task.id === draggableId);
+        const updatedSourceTasks = sourceTasks.filter((task) => task.id !== draggableId);
+
+        const updatedTasks = {
+            ...tasks,
+            [source.droppableId]: updatedSourceTasks.length === 0 ? undefined : updatedSourceTasks,
+            [destination.droppableId]: destination.droppableId === source.droppableId
+                ? [
+                    ...updatedSourceTasks.slice(0, destination.index),
+                    draggedTask,
+                    ...updatedSourceTasks.slice(destination.index)
+                ]
+                : (tasks[destination.droppableId]
+                        ? [
+                            ...tasks[destination.droppableId].slice(0, destination.index),
+                            draggedTask,
+                            ...tasks[destination.droppableId].slice(destination.index)
+                        ]
+                        : [draggedTask]
+                )
+        };
+
+        setTasks(updatedTasks);
     };
-
-    const handleDragToAnotherDay = (taskId: string, targetDate: string) => {
-        // dispatch(moveTask(taskId, targetDate));
-        console.log('handleDragToAnotherDay', taskId, targetDate)
-    };
-
 
     return (
-        <CalendarGridWrapper>
-            {WEEKDAYS.map((weekday, index) => (
-                <Weekday key={'weekday-' + index}>{weekday}</Weekday>
-            ))}
-            {daysForCalendarView.map((day, index) => (
-                day.isToday
-                    ?   <Day
-                            key={'day-box-' + index}
-                            className={`day ${day.isCurrentMonth && 'currentMonth'} ${day.isWeekend && 'weekend'} ${day.isToday && 'today'}`}
-                        >
-                            <DayHeader>
-                                <DayNumber>
-                                    {day.isFirstOrLastDay ? `${day.currentMonth} ${day.dayOfMonth}` : day.dayOfMonth}
-                                </DayNumber>
-                                <CardAmount>Cards 1</CardAmount>
-                            </DayHeader>
-                            <TaskList>
-                                <Task color="orange" number="tewt" title="Task 1" tags={[{title: 'Tag4', color: 'red'}, {title: 'Tag5', color: "blue"}, {title: 'Tag5', color: "orange"}, {title: 'Tag5', color: "green"}]} />
-                                <Task color="orange" number="tewt" title="Task 2" tags={[{title: 'Tag4', color: 'red'}, {title: 'Tag5', color: "blue"}, {title: 'Tag5', color: "orange"}, {title: 'Tag5', color: "green"}]} />
-                            </TaskList>
-                        </Day>
-                    :   <Day
-                            key={'day-box-' + index}
-                            className={`day ${day.isCurrentMonth && 'currentMonth'} ${day.isWeekend && 'weekend'} ${day.isToday && 'today'}`}
-                        >
-                            <DayHeader>
-                                <DayNumber>
-                                    {day.isFirstOrLastDay ? `${day.currentMonth} ${day.dayOfMonth}` : day.dayOfMonth}
-                                </DayNumber>
-                                <CardAmount>Cards 1</CardAmount>
-                            </DayHeader>
-                        </Day>
-            ))}
-        </CalendarGridWrapper>
+        <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
+            <CalendarGridWrapper>
+                {WEEKDAYS.map((weekday, index) => (
+                    <Weekday key={'weekday-' + index}>{weekday}</Weekday>
+                ))}
+                {daysForCalendarView.map((day, index) => (
+                    <Droppable droppableId={day.date} key={'day-box-' + day.date}>
+                        {(provided, snapshot) => (
+                            <Day
+                                ref={provided.innerRef} {...provided.droppableProps}
+                                className={`day ${day.isCurrentMonth && 'currentMonth'} ${day.isWeekend && 'weekend'} ${day.isToday && 'today'}`}
+                            >
+                                <DayHeader>
+                                    <DayNumber>
+                                        {day.isFirstOrLastDay ? `${day.currentMonth} ${day.dayOfMonth}` : day.dayOfMonth}
+                                    </DayNumber>
+
+                                    { tasks[day.date] &&
+                                        <CardAmount>
+                                            Cards {tasks[day.date].length}
+                                        </CardAmount>
+                                    }
+                                </DayHeader>
+
+                                <TaskList dayId={day.date} tasks={tasks[day.date] || []} onDragEnd={onDragEnd} />
+
+                                {provided.placeholder}
+                            </Day>
+                        )}
+                    </Droppable>
+                ))}
+            </CalendarGridWrapper>
+        </DragDropContext>
     )
 }
 
