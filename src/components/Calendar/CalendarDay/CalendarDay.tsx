@@ -1,16 +1,17 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useRef, useState} from 'react';
 import TaskList from "../Task/TaskList";
 import styled from "styled-components";
 import AddNewTaskForm from "../../Forms/AddNewTaskForm/AddNewTaskForm";
 import useOutsideClick from "../../../hooks/useClickOutside";
+import {DraggableProvided, DropResult} from "react-beautiful-dnd";
 
 
 interface CalendarDayProps {
     day: IDay;
     tasks: ITask[] | [];
     tags: ITag[];
-    onDragEnd: (result: any) => void; // todo fix any
-    provided: any; //todo fix any
+    onDragEnd: (result: DropResult) => void;
+    provided: DraggableProvided;
 }
 
 const Day = styled.div`
@@ -117,10 +118,11 @@ const NewCardBtn = styled.button`
 
 
 const CalendarDay: FC<CalendarDayProps> = ({ day, tasks, tags, onDragEnd, provided }) => {
-    const [isExpanded, setIsExpanded] = useState(false); // todo: fix add type
-    const [showForm, setShowForm] = useState(false); // todo: fix add type
-    const [showEditTask, setShowEditTask] = useState<any>(null); // todo: fix add type
-    const dayContentRef = useRef(null); // todo: fix add type
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+    const [showForm, setShowForm] = useState<boolean>(false);
+    const [showEditTask, setShowEditTask] = useState<ITask | null>(null);
+    const dayContentRef = useRef<HTMLDivElement | null>(null);
+
     const handleDayClick = () => {
         setIsExpanded(true);
     }

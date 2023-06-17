@@ -1,11 +1,21 @@
-import React from 'react';
+import React, {FC} from 'react';
 import styled from 'styled-components';
 import Task from "./Task";
-import {Droppable} from "react-beautiful-dnd";
+import {Droppable, DropResult} from "react-beautiful-dnd";
 import {useAppSelector} from "../../../hooks/redux";
 import {selectFilterTagIds, selectIsShowHolidays, selectSearchText} from "../../../store/task/task-selectors";
 import {useGetPublicHolidaysQuery} from "../../../api/publicHolidays";
 import Holiday from "../Holiday/Holiday";
+
+
+interface TaskListProps {
+    tasks: ITask[];
+    dayId: string;
+    onDragEnd: (result: DropResult) => void;
+    isExpanded: boolean;
+    handleEditClick: (taskId: string) => void;
+    tags: ITag[];
+}
 
 const TaskListContainer = styled.div`
   overflow: auto;
@@ -16,7 +26,7 @@ const TaskListContainer = styled.div`
   }
 `;
 
-const TaskList: React.FC = ({ tasks, dayId, onDragEnd, isExpanded, handleEditClick, tags}) => { //todo fix type
+const TaskList: FC<TaskListProps> = ({ tasks, dayId, onDragEnd, isExpanded, handleEditClick, tags}) => {
     const searchText: string = useAppSelector(selectSearchText);
     const filterTagIds: string[] = useAppSelector(selectFilterTagIds);
     const isShowHolidays: boolean = useAppSelector(selectIsShowHolidays);
@@ -25,10 +35,10 @@ const TaskList: React.FC = ({ tasks, dayId, onDragEnd, isExpanded, handleEditCli
 
     return (
         <Droppable droppableId={dayId}>
-            {(provided, snapshot) => (
-                <TaskListContainer className={dayId} ref={provided.innerRef} {...provided.droppableProps} className={`${isExpanded && 'expanded'}`}>
+            {(provided) => (
+                <TaskListContainer ref={provided.innerRef} {...provided.droppableProps} className={`${dayId} ${isExpanded && 'expanded'}`}>
 
-                    {holidays && holidays[dayId] && holidays[dayId].map((holiday, index) => {
+                    {holidays && holidays[dayId] && holidays[dayId].map((holiday) => {
                         return (
                             isShowHolidays && <Holiday
                                 key={holiday.date+holiday.name}
@@ -43,14 +53,14 @@ const TaskList: React.FC = ({ tasks, dayId, onDragEnd, isExpanded, handleEditCli
                         // filter tasks by search text
                         const isTaskMatchingSearch = task.title.toLowerCase().includes(searchText.toLowerCase());
                         // filter tasks by tags
-                        const isTaskMatchingTags = filterTagIds.length === 0 || task.tagIds.some(tagId => filterTagIds.includes(tagId));
+                        const isTaskMatchingTags = filterTagIds.length === 0 || task.tagIds?.some(tagId => filterTagIds.includes(tagId));
 
                         return (isTaskMatchingSearch && isTaskMatchingTags &&
                             <Task
                                 key={task.id}
                                 taskId={task.id}
                                 title={task.title}
-                                taskCheckedTagsIds={task.tagIds}
+                                taskCheckedTagsIds={task.tagIds || []}
                                 tags={tags}
                                 index={index}
                                 onDragEnd={onDragEnd}

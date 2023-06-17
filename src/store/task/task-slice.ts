@@ -46,8 +46,7 @@ const taskSlice = createSlice({
             }
         },
         updateTasks: (state, action: PayloadAction<{ tasks: { [date: string]: ITask[] } }>) => {
-            const tasks = action.payload;
-            state.tasks = tasks;
+            state.tasks = action.payload;
         },
 
         //TAGS
@@ -70,7 +69,6 @@ const taskSlice = createSlice({
 
         // Additional
         importData: (state, action: PayloadAction<ITaskState>) => {
-            // todo: check is valid
            return action.payload;
         }
 

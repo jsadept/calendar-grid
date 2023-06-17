@@ -36,9 +36,9 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
 
     const tagOptions = useAppSelector(selectTagsArray);
     const {handleExportStore, handleImportStore, fileInputRef} = useStoreImportExportTasks();
-    const [showHolidays, setShowHolidays] = useState(true);
-    const [searchInputValue, setSearchInputValue] = useState('');
-    const [selectedTagOptions, setSelectedTagOptions] = useState([]);
+    const [showHolidays, setShowHolidays] = useState<boolean>(true);
+    const [searchInputValue, setSearchInputValue] = useState<string>('');
+    const [selectedTagOptions, setSelectedTagOptions] = useState<OptionType[]>([]);
 
     const handleTagSelect = (selectedOptions) => {
         setSelectedTagOptions(selectedOptions);
@@ -65,12 +65,12 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
 
     useEffect(() => {
         dispatch(updateSearchText(searchInputValue));
-    }, [searchInputValue]);
+    }, [searchInputValue, dispatch]);
 
     useEffect(() => {
-        const selectedTagIds = selectedTagOptions.map(option => option.id.toString());
+        const selectedTagIds = selectedTagOptions.map(option => option.value.toString());
         dispatch(updateTagsFilter(selectedTagIds));
-    }, [selectedTagOptions]);
+    }, [selectedTagOptions, dispatch]);
 
     const handleDownloadStore = () => {
         handleExportStore();

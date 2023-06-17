@@ -1,16 +1,16 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import {Draggable} from "react-beautiful-dnd";
+import {Draggable, DropResult} from "react-beautiful-dnd";
 
-type TaskProps = {
+interface TaskProps {
     taskId: string;
-    index: any; //todo: fix type
+    index: number;
     title?: string;
     tags: ITag[];
-    taskCheckedTagsIds: string[]; //todo: fix type
-    onDragEnd?: (taskId: string, targetIndex: number) => void;
+    taskCheckedTagsIds: string[] | [];
+    onDragEnd?: (result: DropResult) => void;
     handleEditClick: (taskId: string) => void;
-};
+}
 
 const TaskWrapper = styled.div`
   display: flex;
@@ -60,7 +60,7 @@ const Task: React.FC<TaskProps> = ({
     }
     return (
         <Draggable draggableId={taskId} index={index} onDragEnd={onDragEnd}>
-            {(provided, snapshot) => {
+            {(provided) => {
                 return (
                     <TaskWrapper
                         ref={provided.innerRef}

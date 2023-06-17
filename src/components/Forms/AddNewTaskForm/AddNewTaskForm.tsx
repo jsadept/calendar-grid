@@ -1,5 +1,4 @@
 import React, {FC, useEffect, useState} from 'react';
-import styled, {css} from 'styled-components';
 import {useAppDispatch} from "../../../hooks/redux";
 import {addTask, removeTask, updateTags, updateTask} from "../../../store/task/task-slice";
 import {generateRandomColor} from "../../../helpers/common";
@@ -30,7 +29,7 @@ interface AddNewTaskFormProps {
 
 
 const AddNewTaskForm: FC<AddNewTaskFormProps> = ({ onClose, dayId, task, tags }) => {
-    const [title, setTitle] = useState('');
+    const [title, setTitle] = useState<string>('');
     const [formTags, setFormTags] = useState<ITag[]>(tags);
     const dispatch = useAppDispatch();
 
@@ -103,12 +102,8 @@ const AddNewTaskForm: FC<AddNewTaskFormProps> = ({ onClose, dayId, task, tags })
         } else {
             dispatch(addTask(newTask));
         }
-
-        // Update only tags that have changed
-        const updatedTags = formTags.filter((tag) => tag.changed);
-        if (updatedTags.length > 0) {
-            dispatch(updateTags(updatedTags));
-        }
+        // Update tags
+        dispatch(updateTags(formTags));
 
         resetForm();
     };
