@@ -10,7 +10,8 @@ const initialState: ITaskState = {
     calendarFilter: {
         searchText: '',
         tags: [],
-    }
+        isShowHolidays: true,
+    },
 };
 
 const taskSlice = createSlice({
@@ -62,6 +63,10 @@ const taskSlice = createSlice({
         updateTagsFilter: (state, action: PayloadAction<string[]>) => {
             state.calendarFilter.tags = action.payload;
         },
+        // update isShowHolidays
+        updateIsShowHolidays: (state, action: PayloadAction<boolean>) => {
+            state.calendarFilter.isShowHolidays = action.payload;
+        },
 
         // Additional
         importData: (state, action: PayloadAction<ITaskState>) => {
@@ -80,6 +85,7 @@ export const {
     updateTags,
     updateSearchText,
     updateTagsFilter,
+    updateIsShowHolidays,
     importData,
 } = taskSlice.actions;
 

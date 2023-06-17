@@ -11,7 +11,7 @@ import {
     LeftSection, RightSection,
     SearchInput, StyledSelect, ToggleHolidaysButton
 } from "./CalendarHeader.styles";
-import {updateSearchText, updateTagsFilter} from "../../../store/task/task-slice";
+import {updateIsShowHolidays, updateSearchText, updateTagsFilter} from "../../../store/task/task-slice";
 import useStoreImportExportTasks from "../../../hooks/useStoreImportExport";
 
 interface CalendarHeaderProps {
@@ -36,7 +36,7 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
 
     const tagOptions = useAppSelector(selectTagsArray);
     const {handleExportStore, handleImportStore, fileInputRef} = useStoreImportExportTasks();
-    const [showHolidays, setShowHolidays] = useState(false);
+    const [showHolidays, setShowHolidays] = useState(true);
     const [searchInputValue, setSearchInputValue] = useState('');
     const [selectedTagOptions, setSelectedTagOptions] = useState([]);
 
@@ -45,6 +45,7 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
     };
 
     const handleToggleHolidays = () => {
+        dispatch(updateIsShowHolidays(!showHolidays));
         setShowHolidays(!showHolidays);
     }
 

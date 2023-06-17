@@ -5,6 +5,7 @@ import CalendarGrid from './CalendarGrid/CalendarGrid';
 import { createDaysForCalendarView } from '../../helpers/dateHelpers';
 import {WEEKDAYS_ARRAY} from "../../constants";
 import useComponentToImage from "../../hooks/useComponentToImage";
+import {useGetPublicHolidaysQuery} from "../../api/publicHolidays";
 
 
 const Calendar: FC = () => {
@@ -16,7 +17,6 @@ const Calendar: FC = () => {
 
     const calendarRef = useRef<HTMLDivElement | null>(null);
     const downloadImage = useComponentToImage(calendarRef);
-
 
     const daysForCalendarView = useMemo(
         () => createDaysForCalendarView(selectedYear, selectedMonth),

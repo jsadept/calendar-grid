@@ -18,7 +18,7 @@ const Day = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 160px;
+  height: 250px;
   cursor: pointer;
   border-radius: 2px;
   background-color: #F7F8F9;
