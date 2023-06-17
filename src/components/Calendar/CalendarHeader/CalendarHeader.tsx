@@ -19,6 +19,7 @@ interface CalendarHeaderProps {
     onPrevClick: () => void;
     onNextClick: () => void;
     onCurrentClick: () => void;
+    handleDownloadImage: () => void;
 }
 
 const CalendarHeader: FC<CalendarHeaderProps> = ({
@@ -27,6 +28,7 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
     onPrevClick,
     onNextClick,
     onCurrentClick,
+    handleDownloadImage
 }) => {
 
     const dispatch = useAppDispatch();
@@ -108,7 +110,7 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
                 <ToggleHolidaysButton onClick={handleToggleHolidays}>
                     {showHolidays ? 'Hide Holidays' : 'Show Holidays'}
                 </ToggleHolidaysButton>
-                <DownloadButton>Download as Image</DownloadButton>
+                <DownloadButton onClick={handleDownloadImage}>Download as Image</DownloadButton>
                 <ImportButton>Import</ImportButton>
                 <ExportButton>Export</ExportButton>
             </RightSection>

@@ -1,9 +1,10 @@
-import React, { FC, useState, useMemo } from 'react';
+import React, {FC, useState, useMemo, useRef} from 'react';
 import CalendarHeader from './CalendarHeader/CalendarHeader';
 import CalendarGrid from './CalendarGrid/CalendarGrid';
 
 import { createDaysForCalendarView } from '../../helpers/dateHelpers';
 import {WEEKDAYS_ARRAY} from "../../constants";
+import useComponentToImage from "../../hooks/useComponentToImage";
 
 
 const Calendar: FC = () => {
@@ -12,6 +13,10 @@ const Calendar: FC = () => {
     const initialMonth = today.getMonth();
     const [selectedYear, setSelectedYear] = useState(initialYear);
     const [selectedMonth, setSelectedMonth] = useState(initialMonth);
+
+    const calendarRef = useRef<HTMLDivElement | null>(null);
+    const downloadImage = useComponentToImage(calendarRef);
+
 
     const daysForCalendarView = useMemo(
         () => createDaysForCalendarView(selectedYear, selectedMonth),
@@ -41,14 +46,20 @@ const Calendar: FC = () => {
         setSelectedYear(currentYear);
         setSelectedMonth(currentMonth);
     };
+
+    const handleDownloadImage = () => {
+        downloadImage();
+    };
+
     return (
-        <div>
+        <div ref={calendarRef}>
             <CalendarHeader
                 selectedYear={selectedYear}
                 selectedMonth={selectedMonth}
                 onPrevClick={goToPrevMonth}
                 onNextClick={goToNextMonth}
                 onCurrentClick={goToCurrentMonth}
+                handleDownloadImage={handleDownloadImage}
             />
             <CalendarGrid daysForCalendarView={daysForCalendarView} WEEKDAYS={WEEKDAYS_ARRAY} />
         </div>
