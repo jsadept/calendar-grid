@@ -21,7 +21,6 @@ const CalendarGridWrapper = styled.div`
   background-color: #ffffff;
   border-radius: 0 0 5px 5px;
   padding: 1rem;
-  overflow: hidden;
 
   @media only screen and (max-width: 425px) {
     padding: 0.5rem;

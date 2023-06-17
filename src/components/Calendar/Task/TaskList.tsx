@@ -29,7 +29,6 @@ const TaskList: React.FC = ({ tasks, dayId, onDragEnd, isExpanded, handleEditCli
                 <TaskListContainer className={dayId} ref={provided.innerRef} {...provided.droppableProps} className={`${isExpanded && 'expanded'}`}>
 
                     {holidays && holidays[dayId] && holidays[dayId].map((holiday, index) => {
-                        console.log('holiday', holiday, 'index', index, 'dayId', dayId, 'holidays', holidays)
                         return (
                             isShowHolidays && <Holiday
                                 key={holiday.date+holiday.name}
@@ -37,7 +36,7 @@ const TaskList: React.FC = ({ tasks, dayId, onDragEnd, isExpanded, handleEditCli
                                 title={holiday.name}
                             />
                         )
-                    })};
+                    })}
 
                     {tasks && tasks.length > 0 && tasks.map((task, index) => {
 

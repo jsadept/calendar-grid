@@ -1,12 +1,13 @@
 import React from 'react';
 import Calendar from "./components/Calendar/Calendar";
+import Layout from "./components/Layout/Layout";
 
 const App = () => {
     return (
         <div>
-        {/*    Layout   */}
-        {/*    Calendar */}
+        <Layout>
             <Calendar />
+        </Layout>
         </div>
     );
 };
