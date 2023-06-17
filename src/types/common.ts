@@ -30,3 +30,10 @@ interface ITag {
 interface ITagList {
     [key: string]: ITag
 }
+
+
+
+type OptionType = {
+    value: string;
+    label: string;
+};

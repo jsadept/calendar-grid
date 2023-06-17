@@ -1,10 +1,10 @@
-import React, {FC, useCallback, useMemo} from 'react'
+import React, {FC, useCallback} from 'react'
 import styled from 'styled-components';
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import {useAppDispatch, useAppSelector} from "../../hooks/redux";
-import {updateTasks} from "../../store/task/task-slice";
-import CalendarDay from "./CalendarDay";
-import {selectTagsArray, selectTasks} from "../../store/task/task-selectors";
+import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
+import {updateTasks} from "../../../store/task/task-slice";
+import CalendarDay from "../CalendarDay/CalendarDay";
+import {selectTagsArray, selectTasks} from "../../../store/task/task-selectors";
 
 
 type CalendarGridProps = {
@@ -95,7 +95,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) 
                 {daysForCalendarView.map((day, index) => {
                     return (
                         <Droppable droppableId={day.date} key={'day-box-' + day.date}>
-                            {(provided, snapshot) => (
+                            {(provided) => (
                                 <CalendarDay
                                     day={day}
                                     tasks={tasks[day.date] || []}

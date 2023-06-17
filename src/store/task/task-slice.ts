@@ -53,7 +53,16 @@ const taskSlice = createSlice({
         updateTags: (state, action: PayloadAction<ITag[]>) => {
             const tags = action.payload;
             state.tags = tags.reduce((acc, tag) => ({ ...acc, [tag.id]: tag }), {});
+        },
+
+        // Filter
+        updateSearchText: (state, action: PayloadAction<string>) => {
+            state.calendarFilter.searchText = action.payload;
+        },
+        updateTagsFilter: (state, action: PayloadAction<string[]>) => {
+            state.calendarFilter.tags = action.payload;
         }
+
     },
 });
 
@@ -63,6 +72,8 @@ export const {
     updateTask,
     updateTasks,
     updateTags,
+    updateSearchText,
+    updateTagsFilter,
 } = taskSlice.actions;
 
 export default taskSlice.reducer;

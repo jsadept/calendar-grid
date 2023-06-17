@@ -1,6 +1,6 @@
 import React, { FC, useState, useMemo } from 'react';
-import CalendarHeader from './CalendarHeader';
-import CalendarGrid from './CalendarGrid';
+import CalendarHeader from './CalendarHeader/CalendarHeader';
+import CalendarGrid from './CalendarGrid/CalendarGrid';
 
 import { createDaysForCalendarView } from '../../helpers/dateHelpers';
 import {WEEKDAYS_ARRAY} from "../../constants";

@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import TaskList from "./Task/TaskList";
+import TaskList from "../Task/TaskList";
 import styled from "styled-components";
-import AddNewTaskForm from "../Forms/AddNewTaskForm/AddNewTaskForm";
-import useOutsideClick from "../../hooks/useClickOutside";
+import AddNewTaskForm from "../../Forms/AddNewTaskForm/AddNewTaskForm";
+import useOutsideClick from "../../../hooks/useClickOutside";
 
 
 interface CalendarDayProps {
