@@ -109,8 +109,6 @@ export const FormFooter = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
 `;
-// button if has bgcolor variable set to backgound color
-
 export const Button = styled.button<{ color?: string; backgroundColor?: string; disabled?: boolean; }>`
     align-items: center;
     background-color: ${({ backgroundColor }) => backgroundColor || '#E9EBEE'};
@@ -133,6 +131,53 @@ export const Button = styled.button<{ color?: string; backgroundColor?: string; 
     transition-timing-function: ease;
     white-space: normal;
     width: 48%;
+    margin-top: 10px;
+
+    ${({ disabled }) => disabled && css`
+        opacity: 0.5;
+        pointer-events: none;
+    `}
+`;
+
+
+export const ColorPickerWrapper = styled.div`
+  padding: 15px 38px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #DCDFE4;
+`;
+
+export const ColorPickerButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+`;
+
+export const ColorPickerButton = styled.div<{ color?: string; backgroundColor?: string; disabled?: boolean; }>`
+    align-items: center;
+    background-color: ${({ backgroundColor }) => backgroundColor || '#E9EBEE'};
+    border: none;
+    border-radius: 3px;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: ${({ color }) => color || '#172b4d'};
+    cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+    display: inline-flex;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    justify-content: center;
+    line-height: 20px;
+    padding: 6px 12px;
+    text-decoration: none;
+    transition-duration: 85ms;
+    transition-property: background-color, border-color, box-shadow;
+    transition-timing-function: ease;
+    white-space: normal;
+    width: 100%;
     margin-top: 10px;
 
     ${({ disabled }) => disabled && css`
