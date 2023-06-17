@@ -13,14 +13,20 @@ interface IDay {
 interface ITask {
     id: string;
     title: string;
-    tags: ITag[];
+    tagIds?: string[];
     priority?: number;
     date: string;
 }
 
 
 interface ITag {
+    id: string;
     title: string;
     color: string;
     checked?: boolean;
+    isDefault?: boolean;
+}
+
+interface ITagList {
+    [key: string]: ITag
 }

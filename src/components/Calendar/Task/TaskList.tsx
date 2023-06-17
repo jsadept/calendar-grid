@@ -12,23 +12,24 @@ const TaskListContainer = styled.div`
   }
 `;
 
-const TaskList: React.FC = ({ tasks, dayId, onDragEnd, isExpanded }) => { //todo fix type
+const TaskList: React.FC = ({ tasks, dayId, onDragEnd, isExpanded, handleEditClick, tags}) => { //todo fix type
     return (
         <Droppable droppableId={dayId}>
             {(provided, snapshot) => (
-                <TaskListContainer ref={provided.innerRef} {...provided.droppableProps} className={`${isExpanded && 'expanded'}`}>
-                    {tasks && tasks.map((task, index) => (
+                <TaskListContainer className={dayId} ref={provided.innerRef} {...provided.droppableProps} className={`${isExpanded && 'expanded'}`}>
+                    {tasks && tasks.length > 0 && tasks.map((task, index) => (
                         <Task
                             key={task.id}
                             taskId={task.id}
-                            color={task.color}
-                            number={task.number}
                             title={task.title}
-                            tags={task.tags}
+                            taskCheckedTagsIds={task.tagIds}
+                            tags={tags}
                             index={index}
                             onDragEnd={onDragEnd}
+                            handleEditClick={handleEditClick}
                         />
                     ))}
+
                     {provided.placeholder}
                 </TaskListContainer>
             )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import {Draggable} from "react-beautiful-dnd";
 
@@ -6,8 +6,10 @@ type TaskProps = {
     taskId: string;
     index: any; //todo: fix type
     title?: string;
-    tags?: any; //todo: fix type
+    tags: ITag[];
+    taskCheckedTagsIds: string[]; //todo: fix type
     onDragEnd?: (taskId: string, targetIndex: number) => void;
+    handleEditClick: (taskId: string) => void;
 };
 
 const TaskWrapper = styled.div`
@@ -48,8 +50,14 @@ const Task: React.FC<TaskProps> = ({
     index,
     title,
     tags,
-    onDragEnd
+    taskCheckedTagsIds,
+    onDragEnd,
+    handleEditClick
 }) => {
+    const handleOnClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.preventDefault();
+        handleEditClick(taskId);
+    }
     return (
         <Draggable draggableId={taskId} index={index} onDragEnd={onDragEnd}>
             {(provided, snapshot) => {
@@ -58,11 +66,12 @@ const Task: React.FC<TaskProps> = ({
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
+                        onClick={handleOnClick}
                     >
                         {tags && (
                             <TagsWrapper>
-                                {tags.filter((tag) => tag.checked).map((tag, index) => (
-                                    <Tag key={index} color={tag.color} />
+                                {tags.filter((tag) => taskCheckedTagsIds && taskCheckedTagsIds.includes(tag.id)).map((tag, index) => (
+                                    <Tag key={'tag'+taskId+index} color={tag.color} />
                                 ))}
                             </TagsWrapper>
                         )}

@@ -1,15 +1,16 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import TaskList from "./Task/TaskList";
 import styled from "styled-components";
-import AddNewTaskForm from "../Forms/AddNewTaskForm";
+import AddNewTaskForm from "../Forms/AddNewTaskForm/AddNewTaskForm";
 import useOutsideClick from "../../hooks/useClickOutside";
 
 
 interface CalendarDayProps {
     day: IDay;
     tasks: ITask[] | [];
-    onDragEnd: (result: any) => void; // fix any
-    provided: any; // fix any
+    tags: ITag[];
+    onDragEnd: (result: any) => void; // todo fix any
+    provided: any; //todo fix any
 }
 
 const Day = styled.div`
@@ -88,6 +89,7 @@ const DayContent = styled.div`
     border-radius: 15px;
   }
 `;
+
 const NewCardBtn = styled.button`
   align-items: center;
   background-color: #E9EBEE;
@@ -114,9 +116,10 @@ const NewCardBtn = styled.button`
 `;
 
 
-const CalendarDay: FC<CalendarDayProps> = ({ day, tasks, onDragEnd, provided }) => {
+const CalendarDay: FC<CalendarDayProps> = ({ day, tasks, tags, onDragEnd, provided }) => {
     const [isExpanded, setIsExpanded] = useState(false); // todo: fix add type
     const [showForm, setShowForm] = useState(false); // todo: fix add type
+    const [showEditTask, setShowEditTask] = useState<any>(null); // todo: fix add type
     const dayContentRef = useRef(null); // todo: fix add type
     const handleDayClick = () => {
         setIsExpanded(true);
@@ -128,13 +131,22 @@ const CalendarDay: FC<CalendarDayProps> = ({ day, tasks, onDragEnd, provided }) 
         setShowForm(!showForm);
     }
 
+    const closeAll = () => {
+        setIsExpanded(false);
+        setShowForm(false);
+        setShowEditTask(null);
+    }
 
 
     useOutsideClick(dayContentRef,() => {
-        setIsExpanded(false);
-        setShowForm(false);
+        closeAll();
     });
 
+
+    const handleEditClick = (taskId) => {
+        const editTask = tasks.find(task => task.id === taskId);
+        setShowEditTask(editTask);
+    }
     return (
         <Day
             className={`day ${day.isCurrentMonth && 'currentMonth'} ${day.isWeekend && 'weekend'} ${day.isToday && 'today'} ${isExpanded && 'expanded'}`}
@@ -152,15 +164,29 @@ const CalendarDay: FC<CalendarDayProps> = ({ day, tasks, onDragEnd, provided }) 
                 }
             </DayHeader>
             <DayContent  ref={provided.innerRef} {...provided.droppableProps} className={`${isExpanded && 'expanded'}`}>
-                <TaskList dayId={day.date} tasks={tasks} onDragEnd={onDragEnd} isExpanded={isExpanded} />
-                {provided.placeholder}
-                {isExpanded && <NewCardBtn onClick={handleButtonClick}>Create New Card</NewCardBtn>}
-                {showForm &&
+                <TaskList
+                    dayId={day.date}
+                    tasks={tasks}
+                    tags={tags}
+                    onDragEnd={onDragEnd}
+                    isExpanded={isExpanded}
+                    handleEditClick={handleEditClick}
+                />
+
+                {isExpanded &&
+                    <NewCardBtn onClick={handleButtonClick}>Create New Card</NewCardBtn>
+                }
+
+                {(showForm || showEditTask !== null) &&
                     <AddNewTaskForm
-                        onClose={() => {setShowForm(!showForm);}}
+                        onClose={closeAll}
                         dayId={day.date}
+                        task={showEditTask}
+                        tags={tags}
                     />
                 }
+
+                {provided.placeholder}
             </DayContent>
         </Day>
     );

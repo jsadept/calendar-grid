@@ -4,7 +4,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux";
 import {updateTasks} from "../../store/task/task-slice";
 import CalendarDay from "./CalendarDay";
-import {selectTasks} from "../../store/task/task-selectors";
+import {selectTagsArray, selectTasks} from "../../store/task/task-selectors";
 
 
 type CalendarGridProps = {
@@ -47,6 +47,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) 
 
     const dispatch = useAppDispatch();
     const tasks = useAppSelector(selectTasks);
+    const tags = useAppSelector(selectTagsArray);
 
     const onDragEnd = useCallback((result) => {
         const { destination, source, draggableId } = result;
@@ -98,6 +99,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) 
                                 <CalendarDay
                                     day={day}
                                     tasks={tasks[day.date] || []}
+                                    tags={tags}
                                     onDragEnd={onDragEnd}
                                     provided={provided}
                                 />

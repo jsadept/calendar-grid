@@ -5,4 +5,5 @@ export interface ITaskState {
         searchText: string;
         tags: string[];
     };
+    tags: ITagList;
 }
