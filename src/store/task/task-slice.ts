@@ -61,6 +61,12 @@ const taskSlice = createSlice({
         },
         updateTagsFilter: (state, action: PayloadAction<string[]>) => {
             state.calendarFilter.tags = action.payload;
+        },
+
+        // Additional
+        importData: (state, action: PayloadAction<ITaskState>) => {
+            // todo: check is valid
+           return action.payload;
         }
 
     },
@@ -74,6 +80,7 @@ export const {
     updateTags,
     updateSearchText,
     updateTagsFilter,
+    importData,
 } = taskSlice.actions;
 
 export default taskSlice.reducer;

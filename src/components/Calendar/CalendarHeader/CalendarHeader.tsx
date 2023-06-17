@@ -12,6 +12,7 @@ import {
     SearchInput, StyledSelect, ToggleHolidaysButton
 } from "./CalendarHeader.styles";
 import {updateSearchText, updateTagsFilter} from "../../../store/task/task-slice";
+import useStoreImportExportTasks from "../../../hooks/useStoreImportExport";
 
 interface CalendarHeaderProps {
     selectedYear: number;
@@ -34,6 +35,7 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
     const dispatch = useAppDispatch();
 
     const tagOptions = useAppSelector(selectTagsArray);
+    const {handleExportStore, handleImportStore, fileInputRef} = useStoreImportExportTasks();
     const [showHolidays, setShowHolidays] = useState(false);
     const [searchInputValue, setSearchInputValue] = useState('');
     const [selectedTagOptions, setSelectedTagOptions] = useState([]);
@@ -68,6 +70,14 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
         const selectedTagIds = selectedTagOptions.map(option => option.id.toString());
         dispatch(updateTagsFilter(selectedTagIds));
     }, [selectedTagOptions]);
+
+    const handleDownloadStore = () => {
+        handleExportStore();
+    }
+
+    const handleImport = () => {
+        fileInputRef.current?.click();
+    };
 
     return (
         <HeaderWrapper>
@@ -111,8 +121,11 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
                     {showHolidays ? 'Hide Holidays' : 'Show Holidays'}
                 </ToggleHolidaysButton>
                 <DownloadButton onClick={handleDownloadImage}>Download as Image</DownloadButton>
-                <ImportButton>Import</ImportButton>
-                <ExportButton>Export</ExportButton>
+                <ImportButton onClick={handleImport}>
+                    Import
+                    <input ref={fileInputRef} type="file" style={{ display: 'none' }} onChange={handleImportStore} accept=".json" />
+                </ImportButton>
+                <ExportButton onClick={handleDownloadStore}>Export</ExportButton>
             </RightSection>
         </HeaderWrapper>
     );
