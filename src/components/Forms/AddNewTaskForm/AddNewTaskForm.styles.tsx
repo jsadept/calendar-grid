@@ -82,6 +82,7 @@ export const TagInput = styled.input<{ color: string }>`
   flex: 60%;
   height: 25px;
   padding: 5px;
+  width: 100%;
   margin-right: 3%;
   border-radius: 8px;
   border: 0;

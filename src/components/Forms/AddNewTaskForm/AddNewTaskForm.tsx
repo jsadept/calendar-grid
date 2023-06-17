@@ -206,7 +206,7 @@ const AddNewTaskForm: FC<AddNewTaskFormProps> = ({ onClose, dayId, task, tags })
                         Add Tag
                     </Button>
                     <Button type="button" color={'#FFFFFF'} backgroundColor={'#C70000'} disabled={!task} onClick={handleRemoveTask}>
-                        Remove task
+                        Remove
                     </Button>
                     <Button type="submit">{task ? 'Update' : 'Create'}</Button>
                     <Button type="button" onClick={onClose}>
