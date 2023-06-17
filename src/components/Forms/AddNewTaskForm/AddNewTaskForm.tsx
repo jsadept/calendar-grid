@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useRef } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 import { useAppDispatch } from '../../../hooks/redux';
 import { addTask, removeTask, updateTags, updateTask } from '../../../store/task/task-slice';
 import { generateRandomColor } from '../../../helpers/common';
@@ -49,7 +49,7 @@ const AddNewTaskForm: FC<AddNewTaskFormProps> = ({ onClose, dayId, task, tags })
                     tags.map((tag) => {
                         return {
                             ...tag,
-                            checked: task.tagIds.includes(tag.id),
+                            checked: task.tagIds?.includes(tag.id) || false,
                         };
                     })
                 );
@@ -116,6 +116,7 @@ const AddNewTaskForm: FC<AddNewTaskFormProps> = ({ onClose, dayId, task, tags })
         e.preventDefault();
         // New task payload
         const newTask = {
+            id: task?.id || ulid(),
             title,
             tagIds: formTags.filter((tag) => tag.checked).map((tag) => tag.id),
             date: dayId,
@@ -141,7 +142,7 @@ const AddNewTaskForm: FC<AddNewTaskFormProps> = ({ onClose, dayId, task, tags })
         resetForm();
     };
 
-    const handleCloseColorPicker = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLDivElement>) => {
+    const handleCloseColorPicker = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
         setTimeout(
             () => setShowColorPicker(false),

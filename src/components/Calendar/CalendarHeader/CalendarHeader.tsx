@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import {ChangeEvent, FC, useEffect, useState} from 'react';
 import { MONTHS_ARRAY } from '../../../constants';
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {selectTagsArray} from "../../../store/task/task-selectors";
@@ -38,9 +38,9 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
     const {handleExportStore, handleImportStore, fileInputRef} = useStoreImportExportTasks();
     const [showHolidays, setShowHolidays] = useState<boolean>(true);
     const [searchInputValue, setSearchInputValue] = useState<string>('');
-    const [selectedTagOptions, setSelectedTagOptions] = useState<OptionType[]>([]);
+    const [selectedTagOptions, setSelectedTagOptions] = useState<any>([]);
 
-    const handleTagSelect = (selectedOptions) => {
+    const handleTagSelect = (selectedOptions: any) => {
         setSelectedTagOptions(selectedOptions);
     };
 
@@ -49,26 +49,16 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
         setShowHolidays(!showHolidays);
     }
 
-    const handleSearchInputChange = (e) => {
+    const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchInputValue(e.target.value);
     }
-
-
-    const formatValueLabel = (selectedOptions) => {
-        if (selectedOptions.length === 1) {
-            return selectedOptions[0].label;
-        } else if (selectedOptions.length > 1) {
-            return `${selectedOptions.length} selected`;
-        }
-        return '';
-    };
 
     useEffect(() => {
         dispatch(updateSearchText(searchInputValue));
     }, [searchInputValue, dispatch]);
 
     useEffect(() => {
-        const selectedTagIds = selectedTagOptions.map(option => option.value.toString());
+        const selectedTagIds = selectedTagOptions.map((option: OptionType) => option.value.toString());
         dispatch(updateTagsFilter(selectedTagIds));
     }, [selectedTagOptions, dispatch]);
 
@@ -104,7 +94,6 @@ const CalendarHeader: FC<CalendarHeaderProps> = ({
                     options={convertTagsToOptions(tagOptions)}
                     value={selectedTagOptions}
                     onChange={handleTagSelect}
-                    formatValueLabel={formatValueLabel}
                     classNamePrefix="select"
                     styles={{
                         valueContainer: (base) => ({

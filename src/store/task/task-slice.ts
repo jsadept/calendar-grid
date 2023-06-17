@@ -45,7 +45,7 @@ const taskSlice = createSlice({
                 state.tasks = { ...state.tasks, [date]: updatedTasks };
             }
         },
-        updateTasks: (state, action: PayloadAction<{ tasks: { [date: string]: ITask[] } }>) => {
+        updateTasks: (state, action: PayloadAction<{ [date: string]: ITask[] }>) => {
             state.tasks = action.payload;
         },
 
@@ -68,8 +68,8 @@ const taskSlice = createSlice({
         },
 
         // Additional
-        importData: (state, action: PayloadAction<ITaskState>) => {
-           return action.payload;
+        importData: (_, action: PayloadAction<ITaskState>) => {
+            return action.payload;
         }
 
     },

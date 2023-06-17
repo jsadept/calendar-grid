@@ -1,5 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
+import {FC} from "react";
 
 type HolidayProps = {
     holidayId: string;
@@ -34,8 +34,7 @@ const Title = styled.div`
   margin-top: 10px;
 `;
 
-const Holiday: React.FC<HolidayProps> = ({
-     taskId,
+const Holiday: FC<HolidayProps> = ({
      title,
  }) => {
 

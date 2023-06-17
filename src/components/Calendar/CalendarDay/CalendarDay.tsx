@@ -1,9 +1,9 @@
-import React, {FC, useRef, useState} from 'react';
+import {FC, useRef, useState} from 'react';
 import TaskList from "../Task/TaskList";
 import styled from "styled-components";
 import AddNewTaskForm from "../../Forms/AddNewTaskForm/AddNewTaskForm";
 import useOutsideClick from "../../../hooks/useClickOutside";
-import {DraggableProvided, DropResult} from "react-beautiful-dnd";
+import {DroppableProvided, DropResult} from "react-beautiful-dnd";
 
 
 interface CalendarDayProps {
@@ -11,7 +11,7 @@ interface CalendarDayProps {
     tasks: ITask[] | [];
     tags: ITag[];
     onDragEnd: (result: DropResult) => void;
-    provided: DraggableProvided;
+    provided: DroppableProvided ;
 }
 
 const Day = styled.div`
@@ -145,8 +145,8 @@ const CalendarDay: FC<CalendarDayProps> = ({ day, tasks, tags, onDragEnd, provid
     });
 
 
-    const handleEditClick = (taskId) => {
-        const editTask = tasks.find(task => task.id === taskId);
+    const handleEditClick = (taskId: string) => {
+        const editTask = tasks.find((task) => task.id === taskId) || null;
         setShowEditTask(editTask);
     }
     return (
@@ -159,9 +159,9 @@ const CalendarDay: FC<CalendarDayProps> = ({ day, tasks, tags, onDragEnd, provid
                 <DayNumber>
                     {day.isFirstOrLastDay ? `${day.currentMonth} ${day.dayOfMonth}` : day.dayOfMonth}
                 </DayNumber>
-                {tasks && tasks[day.date] && tasks[day.date].length > 0 &&
+                {tasks && tasks[day.date as keyof typeof tasks] && Array(tasks[day.date as keyof typeof tasks]).length > 0 &&
                     <CardAmount>
-                        Cards {tasks[day.date].length}
+                        Cards {Array(tasks[day.date as keyof typeof tasks]).length}
                     </CardAmount>
                 }
             </DayHeader>

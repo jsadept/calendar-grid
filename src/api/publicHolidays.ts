@@ -5,8 +5,10 @@ export const publicHolidaysApi = createApi({
     reducerPath: 'publicHolidaysApi',
     baseQuery: fetchBaseQuery({ baseUrl: HOLIDAYS_API_URL }),
     endpoints: (builder) => ({
-        getPublicHolidays: builder.query<{ [date: string]: PublicHoliday[] }, { year: string; countryCode: string }>({
-            query: () => `/PublicHolidays/${HOLIDAY_YEAR}/${HOLIDAY_COUNTRY_CODE}`,
+        getPublicHolidays: builder.query<{ [date: string]: PublicHoliday[] }, void>({
+            query: () => {
+                return `/PublicHolidays/${HOLIDAY_YEAR}/${HOLIDAY_COUNTRY_CODE}`;
+            },
             transformResponse: (response: PublicHoliday[]) => {
                 const transformedData: { [date: string]: PublicHoliday[] } = {};
 

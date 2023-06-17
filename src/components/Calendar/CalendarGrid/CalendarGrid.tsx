@@ -1,6 +1,6 @@
-import React, {FC, useCallback} from 'react'
+import {FC, useCallback} from 'react'
 import styled from 'styled-components';
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import {DragDropContext, Droppable, DropResult} from "react-beautiful-dnd";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {updateTasks} from "../../../store/task/task-slice";
 import CalendarDay from "../CalendarDay/CalendarDay";
@@ -45,19 +45,19 @@ const Weekday = styled.div`
 const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) => {
 
     const dispatch = useAppDispatch();
-    const tasks = useAppSelector(selectTasks);
+    const tasks: { [date: string]: ITask[] } = useAppSelector(selectTasks);
     const tags = useAppSelector(selectTagsArray);
 
-    const onDragEnd = useCallback((result) => {
+    const onDragEnd = useCallback((result: DropResult) => {
         const { destination, source, draggableId } = result;
 
         if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
             return;
         }
 
-        const sourceTasks = tasks[source.droppableId];
-        const draggedTask = sourceTasks.find((task) => task.id === draggableId);
-        const updatedSourceTasks = sourceTasks.filter((task) => task.id !== draggableId);
+        const sourceTasks = tasks[source.droppableId as string | number];
+        const draggedTask = sourceTasks.find((task: ITask) => task.id === draggableId);
+        const updatedSourceTasks = sourceTasks.filter((task: ITask) => task.id !== draggableId);
 
         const updatedTasks = {
             ...tasks,
@@ -77,12 +77,11 @@ const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) 
                         : [draggedTask]
                 )
         };
-
         if (updatedSourceTasks.length === 0) {
             delete updatedTasks[source.droppableId];
         }
 
-        dispatch(updateTasks(updatedTasks));
+        dispatch(updateTasks(updatedTasks as { [date: string]: ITask[] }));
     }, [tasks, dispatch]);
 
     return (
@@ -91,7 +90,7 @@ const CalendarGrid: FC<CalendarGridProps> = ({ daysForCalendarView, WEEKDAYS }) 
                 {WEEKDAYS.map((weekday, index) => (
                     <Weekday key={'weekday-' + index}>{weekday}</Weekday>
                 ))}
-                {daysForCalendarView.map((day, index) => {
+                {daysForCalendarView.map((day) => {
                     return (
                         <Droppable droppableId={day.date} key={'day-box-' + day.date}>
                             {(provided) => (

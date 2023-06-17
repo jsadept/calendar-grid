@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import {Draggable, DropResult} from "react-beautiful-dnd";
 
@@ -7,8 +6,8 @@ interface TaskProps {
     index: number;
     title?: string;
     tags: ITag[];
-    taskCheckedTagsIds: string[] | [];
-    onDragEnd?: (result: DropResult) => void;
+    taskCheckedTagsIds: string[];
+    onDragEnd: (result: DropResult) => void;
     handleEditClick: (taskId: string) => void;
 }
 
@@ -59,7 +58,13 @@ const Task: React.FC<TaskProps> = ({
         handleEditClick(taskId);
     }
     return (
-        <Draggable draggableId={taskId} index={index} onDragEnd={onDragEnd}>
+        <Draggable
+            draggableId={taskId}
+            index={index}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onDragEnd={onDragEnd}
+        >
             {(provided) => {
                 return (
                     <TaskWrapper

@@ -1,4 +1,4 @@
-import html2canvas, { Html2CanvasOptions } from 'html2canvas';
+import html2canvas, { Options as Html2CanvasOptions } from 'html2canvas';
 import {RefObject} from "react";
 
 const useComponentToImage = (componentRef: RefObject<HTMLElement>) => {

@@ -1,5 +1,9 @@
-import React from 'react';
 import styled from 'styled-components';
+import {FC} from "react";
+
+interface LayoutProps {
+    children: React.ReactNode;
+}
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -25,7 +29,7 @@ const Main = styled.main`
   padding: 20px 40px 140px 40px;
 `;
 
-const Layout = ({ children }) => {
+const Layout: FC<LayoutProps> = ({ children }) => {
     return (
         <LayoutWrapper>
             <Header>

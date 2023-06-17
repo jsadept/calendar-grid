@@ -1,7 +1,19 @@
 import { useEffect, useState } from 'react';
 
+type CalendarDay = {
+    date: string;
+    dayOfWeek: number;
+    dayOfMonth: number;
+    isCurrentMonth: boolean;
+    isWeekend: boolean;
+    isToday: boolean;
+    isFirstOrLastDay: boolean;
+    currentMonth: string;
+};
+
+
 export const useCalendarDays = (year: number, month: number) => {
-    const [calendarDays, setCalendarDays] = useState([]);
+    const [calendarDays, setCalendarDays] = useState<CalendarDay[]>([]);
 
     useEffect(() => {
         const TOTAL_CELLS_COUNT = 7 * 5;

@@ -1,10 +1,10 @@
-import React, {FC, useState, useMemo, useRef} from 'react';
+import {FC, useState, useRef} from 'react';
 import CalendarHeader from './CalendarHeader/CalendarHeader';
 import CalendarGrid from './CalendarGrid/CalendarGrid';
 
-import { createDaysForCalendarView } from '../../helpers/dateHelpers';
 import {WEEKDAYS_ARRAY} from "../../constants";
 import useComponentToImage from "../../hooks/useComponentToImage";
+import {useCalendarDays} from "../../hooks/useCalendarDays";
 
 
 const Calendar: FC = () => {
@@ -17,10 +17,7 @@ const Calendar: FC = () => {
     const calendarRef = useRef<HTMLDivElement | null>(null);
     const downloadImage = useComponentToImage(calendarRef);
 
-    const daysForCalendarView = useMemo(
-        () => createDaysForCalendarView(selectedYear, selectedMonth),
-        [selectedYear, selectedMonth]
-    );
+    const daysForCalendarView = useCalendarDays(selectedYear, selectedMonth);
 
     const goToPrevMonth = () => {
         if (selectedMonth === 0) {
