@@ -4,13 +4,16 @@ import Select from "react-select";
 export const HeaderWrapper = styled.div`
   width: 100%;
   display: flex;
-  height: 56px;
+  min-height: 56px;
   justify-content: space-between;
   align-items: center;
   background-color: rgb(255, 255, 255);
   color: #172b4d;
   border-radius: 5px 5px 0 0;
   padding: 40px 20px;
+    @media (max-width: 998px) {
+        flex-direction: column;
+    }
 `;
 
 export const LeftSection = styled.div`
@@ -27,6 +30,7 @@ export const CenterSection = styled.div`
 export const RightSection = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 export const Button = styled.button`
@@ -36,6 +40,8 @@ export const Button = styled.button`
   border-radius: 5px;
   padding: 10px 20px;
   margin-right: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   cursor: pointer;
 
   &:hover {
@@ -66,6 +72,8 @@ export const SearchInput = styled.input`
   border-radius: 5px;
   margin-right: 10px;
   height: 39px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 export const ImportButton = styled(Button)`
@@ -100,7 +108,7 @@ export const TagFilterModal = styled.div`
   width: 200px;
   padding: 10px;
   background-color: #fff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   z-index: 99999;
 `;
 
